@@ -2,19 +2,35 @@ package com.aiglesiaspubill.ciclovidaappandroid
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
+import com.aiglesiaspubill.ciclovidaappandroid.databinding.ActivityMainBinding
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
-    //PRIMER PASO SE CREA
+    private lateinit var  binding : ActivityMainBinding
+
+    companion object {
+        const val TAG_NOM = "MiNombre"
+    }
+
+    //PRIMER PASO SE CREA EL ACTIVITY MAIN
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-    val binding = ActivityMain
-        setContentView(R.layout.activity_main)
+        //Creamos value BINDING
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        val textAnterior = savedInstanceState?.getString(TAG_NOM)
+        if (textAnterior != null) {
+            binding.tvView.text = textAnterior
+        } else {
+            binding.tvView.text = Random().nextInt().toString()
+        }
         Log.d(MainActivity::class.java.simpleName, "onCreate")
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString(TAG_NOM, binding.tvView.text.toString())
         super.onSaveInstanceState(outState)
     }
 
