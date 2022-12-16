@@ -1,20 +1,43 @@
 package com.aiglesiaspubill.ciclovidaappandroid
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.util.Log
+import com.aiglesiaspubill.ciclovidaappandroid.databinding.ActivityMainBinding
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
-    //PRIMER PASO SE CREA
+    private lateinit var  binding : ActivityMainBinding
+
+    companion object {
+        const val TAG_NOM = "MiNombre"
+    }
+
+    //PRIMER PASO SE CREA EL ACTIVITY MAIN
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-    val binding = ActivityMain
-        setContentView(R.layout.activity_main)
+        //Creamos value BINDING
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        //CON SAVEINSTANCESTATE
+        val textAnterior = savedInstanceState?.getString(TAG_NOM)
+        if (textAnterior != null) {
+            binding.tvView.text = textAnterior
+        } else {
+            binding.tvView.text = Random().nextInt().toString()
+        }
+
+        val sharedPreferences = getPreferences(Context.MODE_PRIVATE)
+        val preferenceText = sharedPreferences.getString(TAG_NOM, "")
+        println(preferenceText)
+
         Log.d(MainActivity::class.java.simpleName, "onCreate")
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString(TAG_NOM, binding.tvView.text.toString())
         super.onSaveInstanceState(outState)
     }
 
@@ -44,8 +67,14 @@ class MainActivity : AppCompatActivity() {
 
     //CUANDO SE QUEDA ESPERANDO EL ACTIVITY A SI SE REINICIA O SE DESTRUYE
     override fun onStop() {
-        super.onStop()
         Log.d(MainActivity::class.java.simpleName, "onStop")
+        //CON SHARED PREFERENCES
+        val sharedPreferences = getPreferences(Context.MODE_PRIVATE)
+        //Obtener valores
+        val ediPrefs = sharedPreferences.edit()
+        ediPrefs.putString(TAG_NOM, binding.tvView.text.toString())
+        ediPrefs.apply()
+        super.onStop()
     }
 
     //SE DESTRUYE EL ACTIVITY
