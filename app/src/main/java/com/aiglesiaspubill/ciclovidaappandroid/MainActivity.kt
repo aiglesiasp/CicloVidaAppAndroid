@@ -2,14 +2,20 @@ package com.aiglesiaspubill.ciclovidaappandroid
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 
 class MainActivity : AppCompatActivity() {
     //PRIMER PASO SE CREA
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    val binding = ActivityMain
         setContentView(R.layout.activity_main)
         Log.d(MainActivity::class.java.simpleName, "onCreate")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
     }
 
     //SEGUNDO PASO SE INICIA
